@@ -1,4 +1,9 @@
 4
+5
+Panadol
+flu
+tablet
+3000
 3
 insto
 mata
@@ -14,8 +19,3 @@ alpara
 demam
 tablet
 7000
-5
-Panadol
-flu
-tablet
-3000
