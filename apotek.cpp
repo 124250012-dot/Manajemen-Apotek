@@ -74,18 +74,18 @@ void saveDataToFile() {
         bantu = bantu->next;
     }
     
-    file << count << endl;
-    bantu = head;
-    while (bantu != nullptr) {
-        file << bantu->data.id << endl;
-        file << bantu->data.nama << endl;
-        file << bantu->data.kategori << endl;
-        file << bantu->data.bentuk << endl;
-        file << bantu->data.harga << endl;
-        bantu = bantu->next;
-    }
-    file.close();
-}
+    file << count << endl; 
+    bantu = head; 
+    while (bantu != nullptr) { 
+        file << bantu->data.id << endl; 
+        file << bantu->data.nama << endl; 
+        file << bantu->data.kategori << endl; 
+        file << bantu->data.bentuk << endl; 
+        file << bantu->data.harga << endl; 
+        bantu = bantu->next; 
+    } 
+    file.close(); 
+} 
 
 void loadDataFromFile() { // dijalankan pas program mulai 
     ifstream file("data_obat.txt");
@@ -139,10 +139,10 @@ void loadDataFromFile() { // dijalankan pas program mulai
     }
     file.close();
     
-    if (jumlahData > 0) {
-        cout << "\n  [OK] Berhasil memuat " << jumlahData << " data obat!\n";
-    }
-}
+    if (jumlahData > 0) { 
+        cout << "\n  [OK] Berhasil memuat " << jumlahData << " data obat!\n"; 
+    } 
+} 
 
 // FUNGSI CRUD (Create, Read, Update, Delete)
 
@@ -218,13 +218,13 @@ void hapusSemuaData() {
         return;
     }
     
-    char yakin;
-    cout << "\n  +------------------------------------------+\n";
-    cout << "  |         HAPUS SEMUA DATA                 |\n";
-    cout << "\n  +----------------------------------------+\n";
-    cout << "  [!] PERINGATAN: Semua data akan hilang!\n";
-    cout << "  Apakah Anda yakin? (y/t): ";
-    cin >> yakin;
+    char yakin; 
+    cout << "\n  +-----------------------------------------+\n";
+    cout << "  |         HAPUS SEMUA DATA                |\n";
+    cout << "\n  +---------------------------------------+\n";
+    cout << "  [!] PERINGATAN: Semua data akan hilang!\n"; 
+    cout << "  Apakah Anda yakin? (y/t): "; 
+    cin >> yakin; 
 
     if (yakin == 'y' || yakin == 'Y') {
         Node* bantu = head;
@@ -279,9 +279,9 @@ void tampilkanSemua() {
     }
     
     cout << "\n";
-    cout << "  +---------------------------------------------------------------------------------+\n";
-    cout << "  | ID | Nama Obat                 | Kategori          | Bentuk      | Harga (Rp)  |\n";
-    cout << "  +---------------------------------------------------------------------------------+\n";
+    cout << "  +-------------------------------------------------------------------------------+\n";
+    cout << "  | ID | Nama Obat                | Kategori          | Bentuk     | Harga (Rp)  |\n";
+    cout << "  +-------------------------------------------------------------------------------+\n";
     
     Node* bantu = head;
     while (bantu != nullptr) {
@@ -293,7 +293,7 @@ void tampilkanSemua() {
              << setw(11) << bantu->data.harga << " |\n";
         bantu = bantu->next;
     }
-    cout << "  +---------------------------------------------------------------------------------+\n";
+    cout << "  +-------------------------------------------------------------------------------+\n";
     
     // tampilkan status sorting (urut/blm)
     if (isSorted) {
@@ -314,13 +314,13 @@ void cetakObat(Obat o) {
 }
 
 void headerTabel() {
-    cout << "\n  +---------------------------------------------------------------------------------+\n";
-    cout << "  | ID | Nama Obat                 | Kategori          | Bentuk      | Harga (Rp)  |\n";
-    cout << "  +---------------------------------------------------------------------------------+\n";
+    cout << "\n  +-------------------------------------------------------------------------------+\n";
+    cout << "  | ID | Nama Obat                | Kategori          | Bentuk     | Harga (Rp)  |\n";
+    cout << "  +-------------------------------------------------------------------------------+\n";
 }
 
 void footerTabel() {
-    cout << "  +---------------------------------------------------------------------------------+\n";
+    cout << "  +-------------------------------------------------------------------------------+\n";
 }
 
 // SORTING 
@@ -383,8 +383,8 @@ void menuSorting() {
     cout << "  +=====================================+\n";
     cout << "  |        SORTING NAMA OBAT            |\n";
     cout << "  +=====================================+\n";
-    cout << "  |  1. Bubble Sort (Ascending A->Z)   |\n";
-    cout << "  |  2. Quick Sort  (Descending Z->A)  |\n";
+    cout << "  |  1. Bubble Sort (Ascending A->Z)    |\n";
+    cout << "  |  2. Quick Sort  (Descending Z->A)   |\n";
     cout << "  +=====================================+\n";
     cout << "  Pilihan: ";
     cin >> pilih;
