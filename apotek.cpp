@@ -140,7 +140,7 @@ void loadDataFromFile() { // dijalankan pas program mulai
     file.close();
     
     if (jumlahData > 0) { 
-        cout << "\n  [OK] Berhasil memuat " << jumlahData << " data obat!\n"; 
+        cout << "\n[OK] Berhasil memuat " << jumlahData << " data obat!\n"; 
     } 
 } 
 
@@ -166,7 +166,7 @@ void tambahObat(Obat o) {
         tail = n;
     }
     
-    cout << "\n  [OK] Obat \"" << o.nama << "\" berhasil ditambahkan!\n";
+    cout << "\n[OK] Obat \"" << o.nama << "\" berhasil ditambahkan!\n";
     isSorted = false;  // slth tambah data, data jd blm terurut
     saveDataToFile();
 }
@@ -220,8 +220,8 @@ void hapusSemuaData() {
     
     char yakin; 
     cout << "\n  +-----------------------------------------+\n";
-    cout << "  |         HAPUS SEMUA DATA                |\n";
-    cout << "\n  +---------------------------------------+\n";
+    cout << "  |           HAPUS SEMUA DATA              |\n";
+    cout << "  +-----------------------------------------+\n";
     cout << "  [!] PERINGATAN: Semua data akan hilang!\n"; 
     cout << "  Apakah Anda yakin? (y/t): "; 
     cin >> yakin; 
@@ -478,7 +478,7 @@ void sequentialTanpaSentinelBentuk(string kataKunci) {
         cout << "\n+------------------------------------------+\n";
         cout << "  |             TIDAK ADA OBAT               |\n";
         cout << "  +------------------------------------------+\n"; 
-        return;
+    return; 
     } 
  
     string kataKunciLower = toLowerCase(kataKunci);
@@ -505,9 +505,9 @@ void sequentialTanpaSentinelBentuk(string kataKunci) {
     } 
 } 
 
-// 3. BINARY SEARCH (berdasarkan Nama Obat) - HARUS SUDAH DIURUTKAN
+// 3. BINARY SEARCH (berdasarkan Nama Obat)-HARUS UDAH DIURUTKAN
 void binarySearchNama(string kataKunci) {
-    // cek apakah data sudah diurutkan dari menu sorting 
+    // cek apa data sudah diurutkan dari menu sorting 
     if (!isSorted) { 
         cout << "\n  +==================================================+\n";
         cout << "  |  [!] DATA BELUM DIURUTKAN!                         |\n";
@@ -516,9 +516,9 @@ void binarySearchNama(string kataKunci) {
         cout << "  +====================================================+\n"; 
         cout << "\n  Silakan urutkan data terlebih dahulu dari MENU SORTING (No.5)\n"; 
         cout << "  Pilih Bubble Sort (Ascending A-Z) untuk mengurutkan data.\n"; 
-        return; 
+    return; 
     } 
-
+ 
     const int max = 200;
     Obat arr[max];
     int n = listkeArray(arr, max);
@@ -527,7 +527,7 @@ void binarySearchNama(string kataKunci) {
         cout << "\n +-----------------------------------------+\n";
         cout << "  |            TIDAK ADA OBAT                |\n";
         cout << "  +-----------------------------------------+\n";
-        return;
+    return;
     } 
 
     string kataKunciLower = toLowerCase(kataKunci);
@@ -587,7 +587,7 @@ void menuSearching() {
  
     } else if (pilih == 2) { 
         string bentuk; 
-        cout << " Masukkan bentuk obat (contoh: cair, padat, inhaler): ";
+        cout << " Masukkan bentuk obat (contoh: cair, tablet, padat, dll): ";
         getline(cin, bentuk); 
         if (bentuk == "") { 
             cout << "\n [!] Input tidak boleh kosong!\n";
@@ -618,25 +618,25 @@ void menuTambah() {
     do { 
         cin.ignore(); 
         cout << "\n"; 
-        cout << "  +--------------------------------------------+\n";
-        cout << "  |               TAMBAH OBAT BARU             |\n";
-        cout << "  +--------------------------------------------+\n";
-        cout << "  Nama Obat    : ";
+        cout << "+--------------------------------------------+\n";
+        cout << "|              TAMBAH OBAT BARU              |\n";
+        cout << "+--------------------------------------------+\n";
+        cout << "Nama Obat    : ";
         getline(cin, obatBaru.nama);
 
         // cek apa nama obat udah dipake
         if (isNamaObatExist(obatBaru.nama)) {
-            cout << "\n [!] Obat dengan nama ini sudah ada!\n";
-            cout << "\n Apakah ingin tambah obat lagi? (y/t): ";
+            cout << "\n[!] Obat dengan nama ini sudah ada!\n";
+            cout << "\nApakah ingin tambah obat lagi? (y/t): ";
             cin >> jawabanUser;
             continue; 
         } 
 
-        cout << " Kategori      : ";
+        cout << "Kategori     : ";
         getline(cin, obatBaru.kategori);
-        cout << " Bentuk Obat   : ";
+        cout << "Bentuk Obat  : ";
         getline(cin, obatBaru.bentuk);
-        cout << " Harga (Rp)    : ";
+        cout << "Harga (Rp)   : ";
         cin >> obatBaru.harga;
 
         // harga gaboleh minus atau 0 
@@ -731,7 +731,7 @@ int main() {
         case 0: 
             clearScreen();
             cout << "\n  +=====================================+\n";
-            cout << "  |         TERIMA KASIH!                |\n";
+            cout << "  |          TERIMA KASIH!              |\n";
             cout << "  +=====================================+\n";
             break;
         default: 

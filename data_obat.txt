@@ -1,5 +1,5 @@
-4
-4
+6
+1
 alpara
 demam
 tablet
@@ -8,13 +8,23 @@ tablet
 anakonidin
 demam
 cair
-12
+12000
+5
+Cetirgi
+batuk
+cair
+89000
 3
 insto
 mata
 cair
-15
-5
+15000
+6
+Lacto B
+diare
+bubuk
+5000
+4
 Panadol
 flu
 tablet
