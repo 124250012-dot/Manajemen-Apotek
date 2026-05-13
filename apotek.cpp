@@ -488,6 +488,7 @@ void sequentialTanpaSentinelBentuk(string kataKunci) {
     cout << "\n  >> Hasil Pencarian (Sequential tanpa Sentinel) [Bentuk]: " << kataKunci << "\n";
     headerTabel(); 
 
+    // loop biasa: cek satu per satu sampe semua data
     for (int i = 0; i < n; i++) { 
         if (toLowerCase(arr[i].bentuk) == kataKunciLower) {
             cetakObat(arr[i]); 
@@ -536,16 +537,16 @@ void binarySearchNama(string kataKunci) {
 
     // proses binary search 
     while (kiri <= kanan) { 
-        int tengah = (kiri + kanan)/2;
+        int tengah = (kiri + kanan)/2; // ambil posisi tengah
         string namaTengah = toLowerCase(arr[tengah].nama); 
 
         if (namaTengah == kataKunciLower) {
             posisi = tengah; 
             break; // ketemu langsung berhenti 
         } else if (namaTengah < kataKunciLower) {
-            kiri = tengah + 1; // cari di sebelah kanan 
+            kiri = tengah + 1; // cari di sebelah kanan (karena nama lebih besar)
         } else { 
-            kanan = tengah - 1; // cari di sebelah kiri 
+            kanan = tengah - 1; // cari di sebelah kiri (karena nama lebih kecil)
         } 
     } 
 
@@ -624,7 +625,7 @@ void menuTambah() {
         cout << "Nama Obat    : ";
         getline(cin, obatBaru.nama);
 
-        // cek apa nama obat udah dipake
+        // cek apa nama obat udah ada
         if (isNamaObatExist(obatBaru.nama)) {
             cout << "\n[!] Obat dengan nama ini sudah ada!\n";
             cout << "\nApakah ingin tambah obat lagi? (y/t): ";
@@ -658,7 +659,8 @@ void menuTambah() {
 
     } while (jawabanUser == 'y' || jawabanUser == 'Y');
 } 
- 
+
+// menu hapus obat berdasarkan nama
 void menuHapus() { 
     if (head == nullptr){
         cout << "\n +------------------------------------------+\n";
