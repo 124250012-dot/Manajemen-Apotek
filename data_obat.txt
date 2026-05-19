@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 4
 4
+=======
+6
+1
+>>>>>>> 3d83543703064a6f3807b0af429ad980558fb586
 alpara
 demam
 tablet
@@ -8,13 +13,32 @@ tablet
 anakonidin
 demam
 cair
+<<<<<<< HEAD
 12
 3
 insto
 mata
 cair
 15
+=======
+12000
+>>>>>>> 3d83543703064a6f3807b0af429ad980558fb586
 5
+Cetirgi
+batuk
+cair
+89000
+3
+insto
+mata
+cair
+15000
+6
+Lacto B
+diare
+bubuk
+5000
+4
 Panadol
 flu
 tablet
