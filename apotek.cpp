@@ -5,45 +5,45 @@
 using namespace std;
 
 struct Obat {
-    int     id;
-    string  nama;
-    string  kategori; // jenis obat (batuk, demam, dll)
-    string  bentuk; // (tablet, sirup, dll)
-    float   harga;
+    int id;
+    string nama;
+    string kategori; // jenis obat (batuk, demam, dll)
+    string bentuk; // (tablet, sirup, dll)
+    float harga;
 };
 
 struct Node { // utk linked list ganda
-    Obat    data; // data obat yg disimpan
-    Node*   prev;
-    Node*   next;
+    Obat data; // data obat yg disimpan
+    Node* prev;
+    Node* next;
 };
 
-Node* head = nullptr;
-Node* tail = nullptr;
-int   idCounter = 1; // kasih id baru otomatis
-bool  isSorted = false;  // menandai data udh diurutkan
+Node* head = nullptr; //sebagai node pertama
+Node* tail = nullptr; //sebagai node terakhir
+int penghitungID = 1; // kasih id baru otomatis
+bool cekUrut = false;  // menandai data udh diurutkan
 
 void clearScreen() {
     system("cls");
 }
 
-string toLowerCase(string str) {
-    for (int i = 0; i < str.length(); i++) {
-        if (str[i] >= 'A' && str[i] <= 'Z') {
-            str[i] = str[i] + 32; // pindah dari huruf besar ke kecil
+string toLowerCase(string teks) {
+    for (int i = 0; i < teks.length(); i++) {
+        if (teks[i] >= 'A' && teks[i] <= 'Z') {
+            teks[i] = teks[i] + 32; // pindah dari huruf besar ke kecil
         }
     }
-    return str;
+    return teks;
 }
 
-bool isSameString(string a, string b) {
+bool cekNamaSama(string a, string b) {
     return toLowerCase(a) == toLowerCase(b);
 }
 
-bool isNamaObatExist(string nama) {
+bool apakahObatAda(string nama) {
     Node* bantu = head;
     while (bantu != nullptr) {
-        if (isSameString(bantu->data.nama, nama)) {
+        if (cekNamaSama(bantu->data.nama, nama)) {
             return true;
         }
         bantu = bantu->next;
@@ -59,7 +59,7 @@ Node* buatNode(Obat o) {
     return n;
 }
 
-void saveDataToFile() {
+void simpanDataKeFile() {
     ofstream file("data_obat.txt"); // buka file buat nulis
     if (!file.is_open()) {
         cout << "\n  [!] Gagal menyimpan data!\n";
@@ -68,14 +68,14 @@ void saveDataToFile() {
     
     // hitung ada brp data
     Node* bantu = head;
-    int count = 0;
+    int jumlah = 0;
     while (bantu != nullptr) {
-        count++;
+        jumlah++;
         bantu = bantu->next;
     }
-    
-    file << count << endl; 
-    bantu = head; 
+
+    file << jumlah << endl;
+    bantu = head;
     while (bantu != nullptr) { 
         file << bantu->data.id << endl; 
         file << bantu->data.nama << endl; 
@@ -87,7 +87,7 @@ void saveDataToFile() {
     file.close(); 
 } 
 
-void loadDataFromFile() { // dijalankan pas program mulai 
+void muatDataDariFile() { // dijalankan pas program mulai 
     ifstream file("data_obat.txt");
     if (!file.is_open()) {
         cout << "\n  [!] Belum ada file data. Mulai dengan data kosong.\n";
@@ -108,9 +108,9 @@ void loadDataFromFile() { // dijalankan pas program mulai
     }
     head = nullptr;
     tail = nullptr;
-    idCounter = 1;
-    isSorted = false;
-    
+    penghitungID = 1;
+    cekUrut = false;
+
     for (int i = 0; i < jumlahData; i++) {
         Obat o;
         file >> o.id;
@@ -133,8 +133,8 @@ void loadDataFromFile() { // dijalankan pas program mulai
         }
         
         // update ID counter utk data berikutnya
-        if (o.id >= idCounter) {
-            idCounter = o.id + 1;
+        if (o.id >= penghitungID) {
+            penghitungID = o.id + 1;
         }
     }
     file.close();
@@ -148,12 +148,12 @@ void loadDataFromFile() { // dijalankan pas program mulai
 
 void tambahObat(Obat o) {
     // cek apa nama obat udh ada
-    if (isNamaObatExist(o.nama)) {
+    if (apakahObatAda(o.nama)) {
         cout << "\n  [!] Obat \"" << o.nama << "\" sudah ada!\n";
         return;
     }
-    
-    o.id = idCounter++; // kasih ID otomatis
+
+    o.id = penghitungID++; // kasih ID otomatis
     Node* n = buatNode(o); 
     
     // klo masih kosong, jd data pertama
@@ -167,8 +167,8 @@ void tambahObat(Obat o) {
     }
     
     cout << "\n[OK] Obat \"" << o.nama << "\" berhasil ditambahkan!\n";
-    isSorted = false;  // slth tambah data, data jd blm terurut
-    saveDataToFile();
+    cekUrut = false;  // slth tambah data, data jd blm terurut
+    simpanDataKeFile();
 }
 
 // hapus berdasarkan nama
@@ -180,7 +180,7 @@ void hapusObat(string nama) {
     
     // cari node yg mau dihapus
     Node* bantu = head;
-    while (bantu != nullptr && !isSameString(bantu->data.nama, nama)) {
+    while (bantu != nullptr && !cekNamaSama(bantu->data.nama, nama)) {
         bantu = bantu->next;
     }
     
@@ -208,8 +208,8 @@ void hapusObat(string nama) {
     
     cout << "\n  [OK] Obat \"" << bantu->data.nama << "\" berhasil dihapus!\n";
     delete bantu;
-    isSorted = false;  // stlh hapus data, data jd blm terurut
-    saveDataToFile();
+    cekUrut = false;  // stlh hapus data, data jd blm terurut
+    simpanDataKeFile();
 }
 
 void hapusSemuaData() {
@@ -235,8 +235,8 @@ void hapusSemuaData() {
         }
         head = nullptr;
         tail = nullptr;
-        idCounter = 1;
-        isSorted = false;
+        penghitungID = 1;
+        cekUrut = false;
 
         // kosongin file
         ofstream file("data_obat.txt", ios::trunc);
@@ -249,10 +249,10 @@ void hapusSemuaData() {
 }
 
 // pindah data dari linked list ke array biasa (biar gampang diurutin)
-int listkeArray(Obat arr[], int maxsize) {
+int listkeArray(Obat arr[], int ukuranMaks) {
     int n = 0;
     Node* bantu = head;
-    while (bantu != nullptr && n < maxsize) {
+    while (bantu != nullptr && n < ukuranMaks) {
         arr[n] = bantu->data;
         n++;
         bantu = bantu->next;
@@ -267,7 +267,7 @@ void updateLinkedListFromArray(Obat arr[], int n) {
         bantu->data = arr[i];
         bantu = bantu->next;
     }
-    saveDataToFile();
+    simpanDataKeFile();
 }
 
 void tampilkanSemua() {
@@ -296,7 +296,7 @@ void tampilkanSemua() {
     cout << "  +-------------------------------------------------------------------------------+\n";
     
     // tampilkan status sorting (urut/blm)
-    if (isSorted) {
+    if (cekUrut) {
         cout << "\n  [INFO] Data saat ini sudah TERURUT (A-Z)\n";
     } else {
         cout << "\n  [INFO] Data saat ini BELUM TERURUT\n";
@@ -325,45 +325,45 @@ void footerTabel() {
 
 // SORTING 
 // urutin dari A-Z
-void bubbleSortAscending(Obat arr[], int n) {
+void bubbleSortAscending(Obat daftar[], int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - 1 - i; j++) {
             // bandingin nama obat
-            if (toLowerCase(arr[j].nama) > toLowerCase(arr[j+1].nama)) {
+            if (toLowerCase(daftar[j].nama) > toLowerCase(daftar[j+1].nama)) {
                 // tuker posisi
-                Obat temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
+                Obat temp = daftar[j];
+                daftar[j] = daftar[j+1];
+                daftar[j+1] = temp;
             }
         }
     }
 }
 
 // urutin dari Z-A
-void quickSortDescending(Obat arr[], int kiri, int kanan) {
+void quickSortDescending(Obat daftar[], int kiri, int kanan) {
     if (kiri >= kanan) return;
     
     int i = kiri, j = kanan;
-    string pivot = toLowerCase(arr[(kiri + kanan) / 2].nama);
-    
+    string pivot = toLowerCase(daftar[(kiri + kanan) / 2].nama);
+
     while (i <= j) {
         // cari yg lebih besar dari pivot di kiri
-        while (toLowerCase(arr[i].nama) > pivot) i++;
+        while (toLowerCase(daftar[i].nama) > pivot) i++;
         // cari yg lebih kecil dari pivot di kanan
-        while (toLowerCase(arr[j].nama) < pivot) j--;
+        while (toLowerCase(daftar[j].nama) < pivot) j--;
         // tuker posisi kalo perlu
         if (i <= j) {
-            Obat temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+            Obat temp = daftar[i]; // nyimpan data obat yang mau ditukar, bersifat sementara
+            daftar[i] = daftar[j];
+            daftar[j] = temp;
             i++;
             j--;
         }
     }
     
     // rekursif utk bagian kiri & kanan
-    if (kiri < j) quickSortDescending(arr, kiri, j);
-    if (i < kanan) quickSortDescending(arr, i, kanan);
+    if (kiri < j) quickSortDescending(daftar, kiri, j);
+    if (i < kanan) quickSortDescending(daftar, i, kanan);
 }
 
 void menuSorting() {
@@ -392,7 +392,7 @@ void menuSorting() {
     if (pilih == 1) {
         bubbleSortAscending(arr, n);
         updateLinkedListFromArray(arr, n);
-        isSorted = true;  // data urut A-Z
+        cekUrut = true;  // data urut A-Z
         cout << "\n  >> Hasil Bubble Sort (A -> Z):\n";
         headerTabel();
         for (int i = 0; i < n; i++) {
@@ -404,7 +404,7 @@ void menuSorting() {
     } else if (pilih == 2) {
         quickSortDescending(arr, 0, n - 1);
         updateLinkedListFromArray(arr, n);
-        isSorted = false;  // data urut Z-A
+        cekUrut = false;  // data urut Z-A
         cout << "\n  >> Hasil Quick Sort (Z -> A):\n";
         headerTabel();
         for (int i = 0; i < n; i++) {
@@ -509,7 +509,7 @@ void sequentialTanpaSentinelBentuk(string kataKunci) {
 // 3. BINARY SEARCH (berdasarkan Nama Obat)-HARUS UDAH DIURUTKAN
 void binarySearchNama(string kataKunci) {
     // cek apa data sudah diurutkan dari menu sorting 
-    if (!isSorted) { 
+    if (!cekUrut) { 
         cout << "\n  +==================================================+\n";
         cout << "  |  [!] DATA BELUM DIURUTKAN!                         |\n";
         cout << "  |  Binary Search butuh data yang sudah terurut       |\n";
@@ -626,7 +626,7 @@ void menuTambah() {
         getline(cin, obatBaru.nama);
 
         // cek apa nama obat udah ada
-        if (isNamaObatExist(obatBaru.nama)) {
+        if (apakahObatAda(obatBaru.nama)) {
             cout << "\n[!] Obat dengan nama ini sudah ada!\n";
             cout << "\nApakah ingin tambah obat lagi? (y/t): ";
             cin >> jawabanUser;
@@ -688,7 +688,7 @@ int main() {
     cout << " |    SISTEM MANAJEMEN APOTEK           |\n";
     cout << " |    DOUBLE LINKED LIST + HEAD & TAIL  |\n";
     cout << " +=====================================+\n";
-    loadDataFromFile(); // baca data dari file 
+    muatDataDariFile(); // baca data dari file 
 
     int pilihMenu; 
     do { 
