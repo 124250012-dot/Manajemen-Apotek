@@ -1,0 +1,26 @@
+5
+1
+alpara
+demam
+tablet
+12000.000000
+2
+vicks
+batuk
+cair
+24000.000000
+3
+lacto B
+diare
+bubuk
+8000.000000
+4
+insto
+mata
+cair
+15000.000000
+5
+paramex
+pusing
+tablet
+5000.000000
