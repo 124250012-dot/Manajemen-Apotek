@@ -489,7 +489,7 @@ void sequentialTanpaSentinelBentuk(string kataKunci) {
     int n = listkeArray(arr, MAX);
 
     if (n == 0) {  
-        cout << "\n+------------------------------------------+\n";
+        cout << "\n  +------------------------------------------+\n";
         cout << "  |             TIDAK ADA OBAT               |\n";
         cout << "  +------------------------------------------+\n"; 
         return; 
@@ -699,8 +699,8 @@ int main() {
     clearScreen(); 
 
     cout << "\n +=====================================+\n";
-    cout << " |    SISTEM MANAJEMEN APOTEK           |\n";
-    cout << " |    DOUBLE LINKED LIST + HEAD & TAIL  |\n";
+    cout << " |    SISTEM MANAJEMEN APOTEK          |\n";
+    cout << " |    DOUBLE LINKED LIST + HEAD & TAIL |\n";
     cout << " +=====================================+\n";
     muatDataDariFile(); // baca data dari file menggunakan fungsi baru
 
