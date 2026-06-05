@@ -1,7 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <fstream>
+#include <cstdio>  
+#include <cstdlib> 
 using namespace std;
 
 struct Obat {
@@ -60,8 +61,8 @@ Node* buatNode(Obat o) {
 }
 
 void simpanDataKeFile() {
-    ofstream file("data_obat.txt"); // buka file buat nulis
-    if (!file.is_open()) {
+    FILE *file = fopen("data_obat.txt", "w"); // buka file buat nulis 
+    if (file == NULL) { // pengecekan apakah operasi membuka file berhasil
         cout << "\n  [!] Gagal menyimpan data!\n";
         return;
     }
@@ -74,30 +75,33 @@ void simpanDataKeFile() {
         bantu = bantu->next;
     }
 
-    file << jumlah << endl;
+    fprintf(file, "%d\n", jumlah); // nulis jumlah data terformat
     bantu = head;
     while (bantu != nullptr) { 
-        file << bantu->data.id << endl; 
-        file << bantu->data.nama << endl; 
-        file << bantu->data.kategori << endl; 
-        file << bantu->data.bentuk << endl; 
-        file << bantu->data.harga << endl; 
+        // pake fprintf untuk nulis data ke dalam file teks
+        fprintf(file, "%d\n", bantu->data.id); 
+        fprintf(file, "%s\n", bantu->data.nama.c_str()); 
+        fprintf(file, "%s\n", bantu->data.kategori.c_str()); 
+        fprintf(file, "%s\n", bantu->data.bentuk.c_str()); 
+        fprintf(file, "%f\n", bantu->data.harga); 
         bantu = bantu->next; 
     } 
-    file.close(); 
+    fclose(file); // menutup file setelah digunakan
 } 
 
-void muatDataDariFile() { // dijalankan pas program mulai 
-    ifstream file("data_obat.txt");
-    if (!file.is_open()) {
+void muatDataDariFile() { // dijalankan pas program mulai
+    FILE *file = fopen("data_obat.txt", "r"); // buka file
+    if (file == NULL) { // jika keluaran berupa NULL berarti file belum tersedia
         cout << "\n  [!] Belum ada file data. Mulai dengan data kosong.\n";
         return;
     }
+
+    // baca jumlah data dari baris pertama dalam keadaan kosong dgn perintah 
+    int jumlahData = 0;
     
-    // baca jumlah data dari baris pertama
-    int jumlahData;
-    file >> jumlahData;
-    file.ignore();
+    if (fscanf(file, "%d\n", &jumlahData) == EOF) { 
+        jumlahData = 0;
+    }
     
     // bersihin data yg ada di memori dulu
     Node* bantu = head;
@@ -113,13 +117,21 @@ void muatDataDariFile() { // dijalankan pas program mulai
 
     for (int i = 0; i < jumlahData; i++) {
         Obat o;
-        file >> o.id;
-        file.ignore();
-        getline(file, o.nama);
-        getline(file, o.kategori);
-        getline(file, o.bentuk);
-        file >> o.harga;
-        file.ignore();
+        char bufferNama[100];
+        char bufferKategori[100];
+        char bufferBentuk[100];
+
+        // pake fscanf dengan %[^\n]\n biar bisa baca spasi
+        fscanf(file, "%d\n", &o.id);
+        fscanf(file, "%[^\n]\n", bufferNama);
+        fscanf(file, "%[^\n]\n", bufferKategori);
+        fscanf(file, "%[^\n]\n", bufferBentuk);
+        fscanf(file, "%f\n", &o.harga);
+
+        // Mengembalikan char array ke format string 
+        o.nama = bufferNama;
+        o.kategori = bufferKategori;
+        o.bentuk = bufferBentuk;
         
         // buat node baru & sambung ke linked list
         Node* n = buatNode(o);
@@ -137,7 +149,7 @@ void muatDataDariFile() { // dijalankan pas program mulai
             penghitungID = o.id + 1;
         }
     }
-    file.close();
+    fclose(file); // nutup file
     
     if (jumlahData > 0) { 
         cout << "\n[OK] Berhasil memuat " << jumlahData << " data obat!\n"; 
@@ -238,9 +250,11 @@ void hapusSemuaData() {
         penghitungID = 1;
         cekUrut = false;
 
-        // kosongin file
-        ofstream file("data_obat.txt", ios::trunc);
-        file.close();
+        // kosongin file pakai "w" 
+        FILE *file = fopen("data_obat.txt", "w");
+        if (file != NULL) {
+            fclose(file);
+        }
 
         cout << "\n  [OK] Semua data berhasil dihapus!\n";
     } else {
@@ -326,10 +340,10 @@ void footerTabel() {
 // SORTING 
 // urutin dari A-Z
 void bubbleSortAscending(Obat daftar[], int n) {
-    for (int i = 0; i < n - 1; i++) {
+    for (int i = 0; i < n - 1; i++) { 
         for (int j = 0; j < n - 1 - i; j++) {
             // bandingin nama obat
-            if (toLowerCase(daftar[j].nama) > toLowerCase(daftar[j+1].nama)) {
+            if (toLowerCase(daftar[j].nama) > toLowerCase(daftar[j+1].nama)) { //nama obat masuk ke lowercase dulu, lalu posisinya di tuker
                 // tuker posisi
                 Obat temp = daftar[j];
                 daftar[j] = daftar[j+1];
@@ -450,7 +464,7 @@ void sequentialSentinelKategori(string kataKunci) {
     if (posisi == jumlahData-1 && toLowerCase(backup.kategori) != kataKunciLower) {
         cout << "\n  [!] Data tidak ditemukan!\n"; 
         cout << "  [!] Tidak ada obat dengan kategori \"" << kataKunci << "\"!\n";
-    return; 
+        return; 
     } 
       
     // klo ketemu, tampilin semua yg sama kategorinya
@@ -478,7 +492,7 @@ void sequentialTanpaSentinelBentuk(string kataKunci) {
         cout << "\n+------------------------------------------+\n";
         cout << "  |             TIDAK ADA OBAT               |\n";
         cout << "  +------------------------------------------+\n"; 
-    return; 
+        return; 
     } 
  
     string kataKunciLower = toLowerCase(kataKunci);
@@ -517,7 +531,7 @@ void binarySearchNama(string kataKunci) {
         cout << "  +====================================================+\n"; 
         cout << "\n  Silakan urutkan data terlebih dahulu dari MENU SORTING (No.5)\n"; 
         cout << "  Pilih Bubble Sort (Ascending A-Z) untuk mengurutkan data.\n"; 
-    return; 
+        return; 
     } 
  
     const int max = 200;
@@ -528,7 +542,7 @@ void binarySearchNama(string kataKunci) {
         cout << "\n +-----------------------------------------+\n";
         cout << "  |            TIDAK ADA OBAT                |\n";
         cout << "  +-----------------------------------------+\n";
-    return;
+        return;
     } 
 
     string kataKunciLower = toLowerCase(kataKunci);
@@ -646,9 +660,9 @@ void menuTambah() {
             cout << " Apakah ingin input ulang? (y/t): ";
             cin >> jawabanUser;
             if (jawabanUser == 'y' || jawabanUser == 'Y') {
-            continue;
+                continue;
             } else { 
-            break;
+                break;
             } 
         } 
 
@@ -666,7 +680,7 @@ void menuHapus() {
         cout << "\n +------------------------------------------+\n";
         cout << " |           TIDAK ADA OBAT                 |\n";
         cout << " +------------------------------------------+\n";
-    return;
+        return;
     } 
 
     string namaDihapus; 
@@ -688,7 +702,7 @@ int main() {
     cout << " |    SISTEM MANAJEMEN APOTEK           |\n";
     cout << " |    DOUBLE LINKED LIST + HEAD & TAIL  |\n";
     cout << " +=====================================+\n";
-    muatDataDariFile(); // baca data dari file 
+    muatDataDariFile(); // baca data dari file menggunakan fungsi baru
 
     int pilihMenu; 
     do { 
@@ -705,41 +719,41 @@ int main() {
         cout << "  Pilihan: "; 
         cin >> pilihMenu;
  
-    switch (pilihMenu) {
-        case 1:
-            clearScreen();
-            tampilkanSemua();
-            break;
-        case 2: 
-            clearScreen();
-            menuTambah();
-            break;
-        case 3: 
-            clearScreen();
-            menuHapus();
-            break;
-        case 4:
-            clearScreen();
-            hapusSemuaData();
-            break;
-        case 5: 
-            clearScreen();
-            menuSorting();
-            break;
-        case 6: 
-            clearScreen();
-            menuSearching();
-            break;
-        case 0: 
-            clearScreen();
-            cout << "\n  +=====================================+\n";
-            cout << "  |          TERIMA KASIH!              |\n";
-            cout << "  +=====================================+\n";
-            break;
-        default: 
-            cout << "\n  [!] Pilihan tidak valid!\n";
-    }
-} while (pilihMenu != 0);
+        switch (pilihMenu) {
+            case 1:
+                clearScreen();
+                tampilkanSemua();
+                break;
+            case 2: 
+                clearScreen();
+                menuTambah();
+                break;
+            case 3: 
+                clearScreen();
+                menuHapus();
+                break;
+            case 4:
+                clearScreen();
+                hapusSemuaData();
+                break;
+            case 5: 
+                clearScreen();
+                menuSorting();
+                break;
+            case 6: 
+                clearScreen();
+                menuSearching();
+                break;
+            case 0: 
+                clearScreen();
+                cout << "\n  +=====================================+\n";
+                cout << "  |          TERIMA KASIH!              |\n";
+                cout << "  +=====================================+\n";
+                break;
+            default: 
+                cout << "\n  [!] Pilihan tidak valid!\n";
+        }
+    } while (pilihMenu != 0);
  
     // bersihin memori sebelum keluar
     Node* bantu = head; 
@@ -749,4 +763,4 @@ int main() {
         bantu = temp; 
     } 
     return 0; 
-} 
+}
